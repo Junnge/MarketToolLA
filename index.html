@@ -4,41 +4,112 @@
     <meta charset="UTF-8">
     <title>Market Skam Tool</title>
     <style>
-        
-
         .mainTable{
-            width: 800px;
+            margin-left: 113px;
         }
 
-        .craftsTable {
+        .craftsTable, .fusionCraftsTable, .matsTable {
             margin-left: 10px;
-            float: left;
-            width: 370px;
-            background-color: #AA6E78;
-
+            margin-bottom: 30px;
+            float: left;            
+            background-color: #262626BF;
+            padding-left: 5px;
+            padding-right: 5px;
+            padding-top: 3px;
+            padding-bottom: 3px;
         }
-        .matsTable {
-            margin-left: 10px;
-            float: left;
-            width: 250px;
-            background-color: #AA6E78;
 
+        .headerRow {
+            display: flex;
+            margin-top: 2px;
+            margin-bottom: 2px;
+        }
+
+        .matNameBox {
+            width: 225px;
+            background-color: #1E2229;
+            color: #BEA677;
+            padding: 2px;
+            text-align: center;
+        }
+
+        .matPriceBox {
+            width: 46px;
+            background-color: #1E2229;
+            color: #BEA677;
+            padding: 2px;
+            text-align: center;
+        }
+
+        .matCostBox {
+            width: 53px;
+            background-color: #1E2229;
+            color: #BEA677;
+            padding: 2px;
+            text-align: center;
+        }
+
+        .matProfitBox {
+            width: 55px;
+            background-color: #1E2229;
+            color: #BEA677;
+            padding: 2px;
+            text-align: center;
         }
 
         .matsRow, .craftsRow {
+            color: white;
+            background-color: #262626E6;
             margin-top: 2px;
-            padding-bottom: 2px;
-            
+            margin-bottom: 2px;
             display: flex;
             align-items: center;
-            border-bottom: 2px solid #C6B2AF;
+        }
+
+        .inputCustomMats {
+            margin-left: 8px;
+            margin-right: 6px;
             color: white;
-        }      
+            text-align: right;
+            width: 30px;
+            border: none;
+            border-top: 1px solid #191919;
+            border-left: 1px solid #191919;
+            border-right: 1px solid #515151;
+            border-bottom: 1px solid #515151;            
+            background-color: #262626E6;
+        }
+        .inputCustomMats:focus {
+            outline: none;
+            background-color: #333333;
+        }
+
+        .border{
+            height: 20px;
+            border-right: 2px solid #665E41;
+            margin-left: 2px;
+            margin-right: 2px;
+        }
+
+        .notice {
+            font-size: 14px;
+            text-align: center;
+            color: white;
+        }
+
+        .settingsRow {
+            margin-top: 10px;
+            padding-bottom: 2px;            
+            display: flex;
+            align-items: center;
+            color: white;
+        }
 
         .imgIcon, .imgCraftIcon{
             height: 26px;
         }
-        .inputCustomMats, .inputCustomCrafts {
+
+        .settingsInput {
             maxle: 4;
             color:  white;
             text-align: right;
@@ -47,19 +118,32 @@
             border-bottom: 1px solid whitesmoke;
             background-color: rgba(0, 0, 0, 0);
         }
-        .inputCustomMats:focus .inputCustomCrafts:focus {
+
+        .settingsInput:focus {
             outline: none;
             width: 30px;
             border-bottom: 1px solid white;
         }
+
         .matsName, .craftsName{
+            width: 200px;
+            margin-left: 3px;
+        }
+
+        .fusionName{
+            margin-left: 3px;
+            width: 256px;
+        }
+
+        .settingsName {
             width: 180px;
             margin-left: 3px;
         }
 
         .craftsCost, .craftsProfit {
-            width: 60px;
+            width: 55px;
             text-align: right;
+            margin-right: 2px;
         }
 
         body {
@@ -69,6 +153,7 @@
         .menu {
             float: left;
         }
+
         .calcButton {
             margin-top: 4px;
             width: 242px;
@@ -79,26 +164,15 @@
             font-size: 25px;
             border: 4px solid #C6B2AF;
             cursor: pointer;
+            background-color: #AF858F;
         }
+
         .calcButton:hover {
             border: 4px solid #6D6292;
         }
 
         div {
             cursor: default;
-        }
-
-        .matNameBox {
-            margin-left: 35px;
-            width: 120px;
-        }
-
-        .matPriceBox {
-            width: 110px;
-        }
-
-        .matCostBox {
-            width: 55px;
         }
 
         .menu {
@@ -110,8 +184,56 @@
             visibility: hidden;
             position: absolute;
             
-            border: 2px solid white; 
-            background-color: #6D6292;           
+            background-color: #161616F6;           
+        }
+
+        .settingsWindow {
+            visibility: hidden;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            border: 4px solid #C6B2AF;
+            padding: 10px;
+            width: 300px;
+            height: 300px;
+            z-index: 99;
+            background-color: #AA6E78;
+        }
+
+        .bgBox {
+            visibility: hidden;
+            position:fixed;
+            padding:0;
+            margin:0;
+
+            top:0;
+            left:0;
+
+            width: 100%;
+            height: 100%;
+            background:rgba(0,0,0,0.5);
+        }
+
+        .fusionTable{
+            margin-bottom: 10px;
+        }
+
+        .common {
+            background: rgb(51,51,52);
+            background: linear-gradient(15deg, rgba(51,51,52,1) 0%, rgba(38,38,38,0.75) 25%);
+        }
+        .rare {
+            background: rgb(7,68,94,);
+            background: linear-gradient(15deg, rgba(7,68,94,1) 0%, rgba(38,38,38,0.75) 25%);
+        }
+        .uncommon {
+            background: rgb(43,71,12);
+            background: linear-gradient(15deg, rgba(43,71,12,1) 0%, rgba(38,38,38,0.75) 25%);
+        }
+        .epic {
+            background: rgb(76,9,98);
+            background: linear-gradient(15deg, rgba(76,9,98,1) 0%, rgba(38,38,38,0.75) 25%);
         }
 
     </style>
@@ -119,238 +241,52 @@
 <body>
     <div class="mainTable">
         <div class="matsTable">
-            <!--
-            <div class="matsRow">
-                <img src="icons/stoneCommon.png" class="imgIcon">
-                <div class="matsName">Stone Common</div>
-                <input type="text" class="inputCustomMats">
-            </div>
-            -->
+            <div class="headerRow"><div class="matNameBox">Material</div><div class="border"></div><div class="matPriceBox">Price</div></div>
+            <div class="matsTableContent"></div>
         </div>
-
         <div class="craftsTable">
+            <div class="headerRow"><div class="matNameBox">Item</div><div class="border"></div><div class="matPriceBox">Price</div><div class="border"></div><div class="matCostBox">Cost</div><div class="border"></div><div class="matProfitBox">Profit</div></div>
+            <div class="craftsTableContent"></div>
+        </div>
+        <div class="fusionCraftsTable">
+            <div class="headerRow"><div class="matNameBox">Item</div><div class="border"></div><div class="matPriceBox">Price</div><div class="border"></div><div class="matCostBox">Cost</div><div class="border"></div><div class="matProfitBox">Profit</div></div>
+            <div class="fusionCraftsTableContent"></div>
+        </div>
+        <div class="menu">
+            <img src="https://c.tenor.com/zT5YykXoEO0AAAAd/lost-ark.gif" style="width: 250px">
+            <div class="calcButton" onclick="calculate()">CALCULATE</div>
+            <div class="calcButton" onclick="reset()">RESET</div>
+            <div class="calcButton" onclick="showSettings()">SETTINGS</div>
         </div>
     </div>
-    <div class="menu">
-        <img src="https://c.tenor.com/zT5YykXoEO0AAAAd/lost-ark.gif" style="width: 250px">
-        <div class="calcButton" onclick="calculate()">CALCULATE</div>
-        <div class="calcButton" onclick="reset()">RESET</div>
-        <div class="calcButton" onclick="">SETTINGS</div>
-    </div>
-
+    
     <div class="tooltipBox">TEXT</div>
+    <div class="settingsWindow">
+        <div class="settingsRow">
+            <div class="settingsName">Workshop level: </div><input type="text" name="" class="settingsInput">
+        </div>
+        <div class="settingsRow">
+            <div class="settingsName">Show unavailable crafts </div><input type="checkbox" name="">
+        </div>
+        <div class="notice">(if you stronghold level is lower requirements)</div>
+        <div class="settingsRow">
+            <div class="settingsName">Craft cost reduction (%): </div><input type="text" name="" class="settingsInput">%
+        </div>
+        <button onclick="hideSettings()">close</button>
+        <button onclick="hideSettings()">save</button>
+        just a placeholder WIP  
+    </div>
+    <div class="bgBox"></div>
     
     <script type="text/javascript">
-        const matsC = {
-                "freshMushroom": {
-                    "name": "Fresh Mushroom",
-                    "rarity": "uncommon",
-                    "price": 0,
-                    "marketPrice": 0,
-                    "bundle": 10,
-                },
-                "shyWildFlower": {
-                    "name": "Shy Wild Flower",
-                    "rarity": "uncommon",
-                    "price": 0,
-                    "marketPrice": 0,
-                    "bundle": 10,
-                },
-                "exquisiteMushroom": {
-                    "name": "Exquisite Mushroom",
-                    "rarity": "rare",
-                    "price": 0,
-                    "marketPrice": 0,
-                    "bundle": 10,
-                },
-                "crudeMushroom": {
-                    "name": "Crude Mushroom",
-                    "rarity": "common",
-                    "price": 0,
-                    "marketPrice": 0,
-                    "bundle": 100,
-                },
-                "brightWildFlower": {
-                    "name": "Bright Wild Flower",
-                    "rarity": "rare",
-                    "price": 0,
-                    "marketPrice": 0,
-                    "bundle": 10,
-                },
-                "wildFlower": {
-                    "name": "Wild Flower",
-                    "rarity": "common",
-                    "price": 0,
-                    "marketPrice": 0,
-                    "bundle": 100,
-                },
-                "tenderTimber": {
-                    "name": "Tender Timber",
-                    "rarity": "uncommon",
-                    "price": 0,
-                    "marketPrice": 0,
-                    "bundle": 10,
-                },
-                "sturdyTimber": {
-                    "name": "Sturdy Timber",
-                    "rarity": "rare",
-                    "price": 0,
-                    "marketPrice": 0,
-                    "bundle": 10,
-                }, 
-                "timber": {
-                    "name": "Timber",
-                    "rarity": "common",
-                    "price": 0,
-                    "marketPrice": 0,
-                    "bundle": 100,
-                }, 
-                "heavyIronOre": {
-                    "name": "Heavy Iron Ore",
-                    "rarity": "uncommon",
-                    "price": 0,
-                    "marketPrice": 0,
-                    "bundle": 10,
-                },
-                "strongIronOre": {
-                    "name": "Strong Iron Ore",
-                    "rarity": "rare",
-                    "price": 0,
-                    "marketPrice": 0,
-                    "bundle": 10,
-                },
-                "ironOre": {
-                    "name": "Iron Ore",
-                    "rarity": "common",
-                    "price": 0,
-                    "marketPrice": 0,
-                    "bundle": 100,
-                },
-                "treatedMeat": {
-                    "name": "Treated Meat",
-                    "rarity": "uncommon",
-                    "price": 0,
-                    "marketPrice": 0,
-                    "bundle": 10,
-                }, 
-                "toughLeather": {
-                    "name": "Tough Leather",
-                    "rarity": "uncommon",
-                    "price": 0,
-                    "marketPrice": 0,
-                    "bundle": 10,
-                }, 
-                "huntingCrystal": {
-                    "name": "Hunting Crystal",
-                    "rarity": "epic",
-                    "price": 0,
-                    "marketPrice": 0,
-                    "bundle": 10,
-                },
-                "orehaThickMeat": {
-                    "name": "Oreha Thick Meat",
-                    "rarity": "rare",
-                    "price": 0,
-                    "marketPrice": 0,
-                    "bundle": 10,
-                },
-                "thickRawMeat": {
-                    "name": "Thick Raw Meat",
-                    "rarity": "common",
-                    "price": 0,
-                    "marketPrice": 0,
-                    "bundle": 100,
-                },
-                "caldarrThickRawMeat": {
-                    "name": "Caldarr Thick Raw Meat",
-                    "rarity": "rare",
-                    "price": 0,
-                    "marketPrice": 0,
-                    "bundle": 10,
-                },
-                "redfleshFish": {
-                    "name": "Redflesh Fish",
-                    "rarity": "uncommon",
-                    "price": 0,
-                    "marketPrice": 0,
-                    "bundle": 10,
-                },
-                "naturalPearl": {
-                    "name": "Natural Pearl",
-                    "rarity": "uncommon",
-                    "price": 0,
-                    "marketPrice": 0,
-                    "bundle": 10,
-                },
-                "caldarrSolarCarp": {
-                    "name": "Caldarr Solar Carp",
-                    "rarity": "rare",
-                    "price": 0,
-                    "marketPrice": 0,
-                    "bundle": 10,
-                },
-                "orehaSolarCarp": {
-                    "name": "Oreha Solar Carp",
-                    "rarity": "rare",
-                    "price": 0,
-                    "marketPrice": 0,
-                    "bundle": 10,
-                },
-                "fishingCrystal": {
-                    "name": "Fishing Crystal",
-                    "rarity": "epic",
-                    "price": 0,
-                    "marketPrice": 0,
-                    "bundle": 10,
-                },
-                "fish": {
-                    "name": "Fish",
-                    "rarity": "common",
-                    "price": 0,
-                    "marketPrice": 0,
-                    "bundle": 100,
-                },
-                "excavatingCrystal": {
-                    "name": "Excavating Crystal",
-                    "rarity": "epic",
-                    "price": 0,
-                    "marketPrice": 0,
-                    "bundle": 10,
-                },
-                "orehaRelic": {
-                    "name": "Oreha Relic",
-                    "rarity": "rare",
-                    "price": 0,
-                    "marketPrice": 0,
-                    "bundle": 10,
-                },
-                "caldarrRelic": {
-                    "name": "Caldarr Relic",
-                    "rarity": "rare",
-                    "price": 0,
-                    "marketPrice": 0,
-                    "bundle": 10,
-                },
-                "rareRelic": {
-                    "name": "Rare Relic",
-                    "rarity": "uncommon",
-                    "price": 0,
-                    "marketPrice": 0,
-                    "bundle": 10,
-                },
-                "ancientRelic": {
-                    "name": "Ancient Relic",
-                    "rarity": "common",
-                    "price": 0,
-                    "marketPrice": 0,
-                    "bundle": 100,
-                },
+        const dataVer = 1;
 
-            }
-      
-        const craftsC = {
+        const matsC = {
             "hpPotion":{
                 "name": "HP Potion",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "uncommon",
                 "amount": 3,
                 "marketPrice": 0,
@@ -363,6 +299,9 @@
             },
             "majorhpPotion":{
                 "name": "Major HP Potion",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "rare",
                 "amount": 3,
                 "marketPrice": 0,
@@ -375,6 +314,9 @@
             },
             "elementalhpPotion":{
                 "name": "Elemental HP Potion",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "epic",
                 "amount": 3,
                 "marketPrice": 0,
@@ -386,8 +328,26 @@
                     "wildFlower": 48
                 }
             },
+            "splendidElementalhpPotion":{
+                "name": "Splendid Elemental HP Potion",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
+                "rarity": "epic",
+                "amount": 2,
+                "marketPrice": 0,
+                "craftPrice": 30,
+                "craftCost": 0,
+                "recipe": {
+                    "elementalhpPotion": 3,
+                    "brightWildFlower": 8
+                }
+            },
             "awakeningPotion":{
                 "name": "Awakening Potion",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "epic",
                 "amount": 3,
                 "marketPrice": 0,
@@ -403,6 +363,9 @@
             },
             "panacea":{
                 "name": "Panacea",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "rare",
                 "amount": 3,
                 "marketPrice": 0,
@@ -413,10 +376,28 @@
                     "freshMushroom": 16,
                     "rareRelic": 5,
                     "crudeMushroom": 32
+                }
+            },
+            "splendidPanacea":{
+                "name": "Splendid Panacea",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
+                "rarity": "rare",
+                "amount": 2,
+                "marketPrice": 0,
+                "craftPrice": 15,
+                "craftCost": 0,
+                "recipe": {
+                    "panacea": 3,
+                    "exquisiteMushroom": 10
                 }
             },
             "protectivePotion":{
                 "name": "Protective Potion",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "rare",
                 "amount": 3,
                 "marketPrice": 0,
@@ -429,8 +410,26 @@
                     "crudeMushroom": 32
                 }
             },
+            "splendidProtectivePotion":{
+                "name": "Splendid Protective Potion",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
+                "rarity": "rare",
+                "amount": 2,
+                "marketPrice": 0,
+                "craftPrice": 15,
+                "craftCost": 0,
+                "recipe": {
+                    "protectivePotion": 3,
+                    "exquisiteMushroom": 10
+                }
+            },
             "thunderPotion":{
                 "name": "Thunder Potion",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "rare",
                 "amount": 3,
                 "marketPrice": 0,
@@ -443,8 +442,26 @@
                     "wildFlower": 32
                 }
             },
+            "splendidThunderPotion":{
+                "name": "Splendid Thunder Potion",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
+                "rarity": "rare",
+                "amount": 2,
+                "marketPrice": 0,
+                "craftPrice": 15,
+                "craftCost": 0,
+                "recipe": {
+                    "thunderPotion": 3,
+                    "exquisiteMushroom": 10
+                }
+            },
             "adrophinePotion":{
                 "name": "Adrophine Potion",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "epic",
                 "amount": 3,
                 "marketPrice": 0,
@@ -460,6 +477,9 @@
             },
             "timeStopPotion":{
                 "name": "Time Stop Potion",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "epic",
                 "amount": 3,
                 "marketPrice": 0,
@@ -475,6 +495,9 @@
             },
             "sacredBomb":{
                 "name": "Sacred Bomb",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "rare",
                 "amount": 3,
                 "marketPrice": 0,
@@ -487,8 +510,26 @@
                     "ironOre": 3
                 }
             },
+            "splendidSacredBomb":{
+                "name": "Splendid Sacred Bomb",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
+                "rarity": "rare",
+                "amount": 2,
+                "marketPrice": 0,
+                "craftPrice": 15,
+                "craftCost": 0,
+                "recipe": {
+                    "sacredBomb": 3,
+                    "exquisiteMushroom": 4
+                }
+            },
             "corrosiveBomb":{
                 "name": "Sacred Bomb",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "rare",
                 "amount": 3,
                 "marketPrice": 0,
@@ -501,8 +542,26 @@
                     "crudeMushroom": 32
                 }
             },
+            "splendidCorrosiveBomb":{
+                "name": "Splendid Sacred Bomb",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
+                "rarity": "rare",
+                "amount": 2,
+                "marketPrice": 0,
+                "craftPrice": 15,
+                "craftCost": 0,
+                "recipe": {
+                    "corrosiveBomb": 3,
+                    "exquisiteMushroom": 2
+                }
+            },
             "sleepBomb":{
                 "name": "Sleep Bomb",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "rare",
                 "amount": 3,
                 "marketPrice": 0,
@@ -515,8 +574,26 @@
                     "crudeMushroom": 32
                 }
             },
+            "splendidSleepBomb":{
+                "name": "Splendid Sleep Bomb",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
+                "rarity": "rare",
+                "amount": 2,
+                "marketPrice": 0,
+                "craftPrice": 15,
+                "craftCost": 0,
+                "recipe": {
+                    "sleepBomb": 3,
+                    "exquisiteMushroom": 2
+                }
+            },
             "destructionBomb":{
                 "name": "Destruction Bomb",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "rare",
                 "amount": 3,
                 "marketPrice": 0,
@@ -529,8 +606,26 @@
                     "crudeMushroom": 32
                 }
             },
+            "splendidDestructionBomb":{
+                "name": "Splendid Destruction Bomb",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
+                "rarity": "rare",
+                "amount": 2,
+                "marketPrice": 0,
+                "craftPrice": 15,
+                "craftCost": 0,
+                "recipe": {
+                    "destructionBomb": 4,
+                    "exquisiteMushroom": 2, 
+                }
+            },
             "pheromoneBomb":{
                 "name": "Pheromone Bomb",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "rare",
                 "amount": 3,
                 "marketPrice": 0,
@@ -545,6 +640,9 @@
             },
             "flashGrenade":{
                 "name": "Flash Grenade",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "rare",
                 "amount": 3,
                 "marketPrice": 0,
@@ -555,10 +653,28 @@
                     "freshMushroom": 12,
                     "crudeMushroom": 24,
                     "ironOre": 5
+                }
+            },
+            "splendidFlashGrenade":{
+                "name": "Splendid Flash Grenade",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
+                "rarity": "rare",
+                "amount": 2,
+                "marketPrice": 0,
+                "craftPrice": 15,
+                "craftCost": 0,
+                "recipe": {
+                    "flashGrenade": 3,
+                    "exquisiteMushroom": 4
                 }
             },
             "flameGrenade":{
                 "name": "Flame Grenade",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "rare",
                 "amount": 3,
                 "marketPrice": 0,
@@ -569,10 +685,28 @@
                     "freshMushroom": 12,
                     "tenderTimber": 3,
                     "crudeMushroom": 24
+                }
+            },
+            "splendidFlameGrenade":{
+                "name": "Splendid Flame Grenade",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
+                "rarity": "rare",
+                "amount": 2,
+                "marketPrice": 0,
+                "craftPrice": 15,
+                "craftCost": 0,
+                "recipe": {
+                    "flameGrenade": 3,
+                    "exquisiteMushroom": 4
                 }
             },
             "frostGrenade":{
                 "name": "Frost Grenade",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "rare",
                 "amount": 3,
                 "marketPrice": 0,
@@ -583,10 +717,28 @@
                     "freshMushroom": 12,
                     "crudeMushroom": 24,
                     "ironOre": 5
+                }
+            },
+            "splendidFrostGrenade":{
+                "name": "Splendid Frost Grenade",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
+                "rarity": "rare",
+                "amount": 2,
+                "marketPrice": 0,
+                "craftPrice": 15,
+                "craftCost": 0,
+                "recipe": {
+                    "frostGrenade": 3,
+                    "exquisiteMushroom": 4
                 }
             },
             "electricGrenade":{
                 "name": "Electric Grenade",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "rare",
                 "amount": 3,
                 "marketPrice": 0,
@@ -597,10 +749,28 @@
                     "freshMushroom": 12,
                     "crudeMushroom": 24,
                     "ironOre": 5
+                }
+            },
+            "splendidElectricGrenade":{
+                "name": "Splendid Electric Grenade",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
+                "rarity": "rare",
+                "amount": 2,
+                "marketPrice": 0,
+                "craftPrice": 15,
+                "craftCost": 0,
+                "recipe": {
+                    "electricGrenade": 3,
+                    "exquisiteMushroom": 4
                 }
             },
             "darkGrenade":{
                 "name": "Dark Grenade",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "rare",
                 "amount": 3,
                 "marketPrice": 0,
@@ -611,10 +781,28 @@
                     "freshMushroom": 12,
                     "tenderTimber": 3,
                     "crudeMushroom": 24
+                }
+            },
+            "splendidDarkGrenade":{
+                "name": "Splendid Dark Grenade",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
+                "rarity": "rare",
+                "amount": 2,
+                "marketPrice": 0,
+                "craftPrice": 15,
+                "craftCost": 0,
+                "recipe": {
+                    "darkGrenade": 3,
+                    "exquisiteMushroom": 4
                 }
             },
             "whirlwindGrenade":{
                 "name": "Whirlwind Grenade",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "rare",
                 "amount": 3,
                 "marketPrice": 0,
@@ -627,8 +815,26 @@
                     "crudeMushroom": 24
                 }
             },
+            "splendidWhirlwindGrenade":{
+                "name": "Splendid Whirlwind Grenade",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
+                "rarity": "rare",
+                "amount": 2,
+                "marketPrice": 0,
+                "craftPrice": 15,
+                "craftCost": 0,
+                "recipe": {
+                    "whirlwindGrenade": 3,
+                    "exquisiteMushroom": 4
+                }
+            },
             "clayGrenade":{
                 "name": "Clay Grenade",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "rare",
                 "amount": 3,
                 "marketPrice": 0,
@@ -641,8 +847,26 @@
                     "ironOre": 5
                 }
             },
+            "splendidClayGrenade":{
+                "name": "Splendid Clay Grenade",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
+                "rarity": "rare",
+                "amount": 2,
+                "marketPrice": 0,
+                "craftPrice": 15,
+                "craftCost": 0,
+                "recipe": {
+                    "clayGrenade": 3,
+                    "exquisiteMushroom": 4
+                }
+            },
             "camouflageRobe":{
                 "name": "Camouflage Robe",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "rare",
                 "amount": 3,
                 "marketPrice": 0,
@@ -654,8 +878,26 @@
                     "crudeMushroom": 35
                 }
             },
+            "splendidDisguiseRobe":{
+                "name": "Splendid Disguise Robe",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
+                "rarity": "rare",
+                "amount": 2,
+                "marketPrice": 0,
+                "craftPrice": 15,
+                "craftCost": 0,
+                "recipe": {
+                    "camouflageRobe": 3,
+                    "exquisiteMushroom": 9
+                }
+            },
             "stealthRobe":{
                 "name": "Stealth Robe",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "epic",
                 "amount": 3,
                 "marketPrice": 0,
@@ -669,8 +911,26 @@
                     "crudeMushroom": 35
                 }
             },
+            "splendidStealthRobe":{
+                "name": "Splendid Stealth Robe",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
+                "rarity": "epic",
+                "amount": 2,
+                "marketPrice": 0,
+                "craftPrice": 30,
+                "craftCost": 0,
+                "recipe": {
+                    "stealthRobe": 3,
+                    "exquisiteMushroom": 9
+                }
+            },
             "swiftnessRobe":{
                 "name": "Swiftness Robe",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "rare",
                 "amount": 3,
                 "marketPrice": 0,
@@ -682,8 +942,26 @@
                     "wildFlower": 27
                 }
             },
+            "splendidSwiftnessRobe":{
+                "name": "Splendid Swiftness Robe",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
+                "rarity": "rare",
+                "amount": 2,
+                "marketPrice": 0,
+                "craftPrice": 15,
+                "craftCost": 0,
+                "recipe": {
+                    "swiftnessRobe": 3,
+                    "exquisiteMushroom": 3
+                }
+            },
             "flare":{
                 "name": "Flare",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "uncommon",
                 "amount": 3,
                 "marketPrice": 0,
@@ -694,8 +972,26 @@
                     "wildFlower": 35
                 }
             },
+            "splendidFlare":{
+                "name": "Splendid Flare",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
+                "rarity": "uncommon",
+                "amount": 2,
+                "marketPrice": 0,
+                "craftPrice": 5,
+                "craftCost": 0,
+                "recipe": {
+                    "flare": 3,
+                    "shyWildFlower": 20
+                }
+            },
             "tauntingScarecrow":{
-                "name": "Flare",
+                "name": "Scarecrow",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "rare",
                 "amount": 3,
                 "marketPrice": 0,
@@ -707,8 +1003,26 @@
                     "timber": 13
                 }
             },
+            "splendidTauntingScarecrow":{
+                "name": "Splendid Scarecrow",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
+                "rarity": "rare",
+                "amount": 2,
+                "marketPrice": 0,
+                "craftPrice": 15,
+                "craftCost": 0,
+                "recipe": {
+                    "tauntingScarecrow": 3,
+                    "exquisiteMushroom": 7
+                }
+            },
             "campfire":{
                 "name": "Campfire",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "rare",
                 "amount": 3,
                 "marketPrice": 0,
@@ -720,8 +1034,26 @@
                     "timber": 12
                 }
             },
+            "splendidCampfire":{
+                "name": "Splendid Campfire",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
+                "rarity": "rare",
+                "amount": 2,
+                "marketPrice": 0,
+                "craftPrice": 15,
+                "craftCost": 0,
+                "recipe": {
+                    "campfire": 3,
+                    "exquisiteMushroom": 6
+                }
+            },
             "marchingFlag":{
                 "name": "Marching Flag",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "rare",
                 "amount": 3,
                 "marketPrice": 0,
@@ -733,8 +1065,26 @@
                     "crudeMushroom": 38
                 }
             },
+            "splendidMarchingFlag":{
+                "name": "Splendid Marching Flag",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
+                "rarity": "rare",
+                "amount": 2,
+                "marketPrice": 0,
+                "craftPrice": 15,
+                "craftCost": 0,
+                "recipe": {
+                    "marchingFlag": 3,
+                    "exquisiteMushroom": 3
+                }
+            },
             "sacredCharm":{
                 "name": "Sacred Charm",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "rare",
                 "amount": 3,
                 "marketPrice": 0,
@@ -746,8 +1096,26 @@
                     "crudeMushroom": 30
                 }
             },
+            "splendidSacredCharm":{
+                "name": "Splendid Sacred Charm",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
+                "rarity": "rare",
+                "amount": 2,
+                "marketPrice": 0,
+                "craftPrice": 15,
+                "craftCost": 0,
+                "recipe": {
+                    "sacredCharm": 3,
+                    "exquisiteMushroom": 3
+                }
+            },
             "luterrasHorn":{
                 "name": "Luterra's Horn",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "epic",
                 "amount": 3,
                 "marketPrice": 0,
@@ -763,6 +1131,9 @@
             },
             "repairShopPortalScroll":{
                 "name": "Repair Shop Portal Scroll",
+                "type": "item",
+                "class": "",
+                "bundle": 1,
                 "rarity": "rare",
                 "amount": 3,
                 "marketPrice": 0,
@@ -773,130 +1144,627 @@
                     "naturalPearl": 16,
                     "wildFlower": 144
                 }
+            },
+            "freshMushroom": {
+                "name": "Fresh Mushroom",
+                "type": "material",
+                "class": "",
+                "rarity": "uncommon",
+                "price": 0,
+                "marketPrice": 0,
+                "bundle": 10,
+            },
+            "shyWildFlower": {
+                "name": "Shy Wild Flower",
+                "type": "material",
+                "class": "",
+                "rarity": "uncommon",
+                "price": 0,
+                "marketPrice": 0,
+                "bundle": 10,
+            },
+            "exquisiteMushroom": {
+                "name": "Exquisite Mushroom",
+                "type": "material",
+                "class": "",
+                "rarity": "rare",
+                "price": 0,
+                "marketPrice": 0,
+                "bundle": 10,
+            },
+            "crudeMushroom": {
+                "name": "Crude Mushroom",
+                "type": "material",
+                "class": "",
+                "rarity": "common",
+                "price": 0,
+                "marketPrice": 0,
+                "bundle": 100,
+            },
+            "brightWildFlower": {
+                "name": "Bright Wild Flower",
+                "type": "material",
+                "class": "",
+                "rarity": "rare",
+                "price": 0,
+                "marketPrice": 0,
+                "bundle": 10,
+            },
+            "wildFlower": {
+                "name": "Wild Flower",
+                "type": "material",
+                "class": "",
+                "rarity": "common",
+                "price": 0,
+                "marketPrice": 0,
+                "bundle": 100,
+            },
+            "tenderTimber": {
+                "name": "Tender Timber",
+                "type": "material",
+                "class": "",
+                "rarity": "uncommon",
+                "price": 0,
+                "marketPrice": 0,
+                "bundle": 10,
+            },
+            "sturdyTimber": {
+                "name": "Sturdy Timber",
+                "type": "material",
+                "class": "",
+                "rarity": "rare",
+                "price": 0,
+                "marketPrice": 0,
+                "bundle": 10,
+            }, 
+            "timber": {
+                "name": "Timber",
+                "type": "material",
+                "class": "",
+                "rarity": "common",
+                "price": 0,
+                "marketPrice": 0,
+                "bundle": 100,
+            }, 
+            "heavyIronOre": {
+                "name": "Heavy Iron Ore",
+                "type": "material",
+                "class": "",
+                "rarity": "uncommon",
+                "price": 0,
+                "marketPrice": 0,
+                "bundle": 10,
+            },
+            "strongIronOre": {
+                "name": "Strong Iron Ore",
+                "type": "material",
+                "class": "",
+                "rarity": "rare",
+                "price": 0,
+                "marketPrice": 0,
+                "bundle": 10,
+            },
+            "ironOre": {
+                "name": "Iron Ore",
+                "type": "material",
+                "class": "",
+                "rarity": "common",
+                "price": 0,
+                "marketPrice": 0,
+                "bundle": 100,
+            },
+            "treatedMeat": {
+                "name": "Treated Meat",
+                "type": "material",
+                "class": "",
+                "rarity": "uncommon",
+                "price": 0,
+                "marketPrice": 0,
+                "bundle": 10,
+            }, 
+            "toughLeather": {
+                "name": "Tough Leather",
+                "type": "material",
+                "class": "",
+                "rarity": "uncommon",
+                "price": 0,
+                "marketPrice": 0,
+                "bundle": 10,
+            }, 
+            "huntingCrystal": {
+                "name": "Hunting Crystal",
+                "type": "material",
+                "class": "",
+                "rarity": "epic",
+                "price": 0,
+                "marketPrice": 0,
+                "bundle": 10,
+            },
+            "orehaThickMeat": {
+                "name": "Oreha Thick Meat",
+                "type": "material",
+                "class": "",
+                "rarity": "rare",
+                "price": 0,
+                "marketPrice": 0,
+                "bundle": 10,
+            },
+            "thickRawMeat": {
+                "name": "Thick Raw Meat",
+                "type": "material",
+                "class": "",
+                "rarity": "common",
+                "price": 0,
+                "marketPrice": 0,
+                "bundle": 100,
+            },
+            "caldarrThickRawMeat": {
+                "name": "Caldarr Thick Raw Meat",
+                "type": "material",
+                "class": "",
+                "rarity": "rare",
+                "price": 0,
+                "marketPrice": 0,
+                "bundle": 10,
+            },
+            "redfleshFish": {
+                "name": "Redflesh Fish",
+                "type": "material",
+                "class": "",
+                "rarity": "uncommon",
+                "price": 0,
+                "marketPrice": 0,
+                "bundle": 10,
+            },
+            "naturalPearl": {
+                "name": "Natural Pearl",
+                "type": "material",
+                "class": "",
+                "rarity": "uncommon",
+                "price": 0,
+                "marketPrice": 0,
+                "bundle": 10,
+            },
+            "caldarrSolarCarp": {
+                "name": "Caldarr Solar Carp",
+                "type": "material",
+                "class": "",
+                "rarity": "rare",
+                "price": 0,
+                "marketPrice": 0,
+                "bundle": 10,
+            },
+            "orehaSolarCarp": {
+                "name": "Oreha Solar Carp",
+                "type": "material",
+                "class": "",
+                "rarity": "rare",
+                "price": 0,
+                "marketPrice": 0,
+                "bundle": 10,
+            },
+            "fishingCrystal": {
+                "name": "Fishing Crystal",
+                "type": "material",
+                "class": "",
+                "rarity": "epic",
+                "price": 0,
+                "marketPrice": 0,
+                "bundle": 10,
+            },
+            "fish": {
+                "name": "Fish",
+                "type": "material",
+                "class": "",
+                "rarity": "common",
+                "price": 0,
+                "marketPrice": 0,
+                "bundle": 100,
+            },
+            "excavatingCrystal": {
+                "name": "Excavating Crystal",
+                "type": "material",
+                "class": "",
+                "rarity": "epic",
+                "price": 0,
+                "marketPrice": 0,
+                "bundle": 10,
+            },
+            "orehaRelic": {
+                "name": "Oreha Relic",
+                "type": "material",
+                "class": "",
+                "rarity": "rare",
+                "price": 0,
+                "marketPrice": 0,
+                "bundle": 10,
+            },
+            "caldarrRelic": {
+                "name": "Caldarr Relic",
+                "type": "material",
+                "class": "",
+                "rarity": "rare",
+                "price": 0,
+                "marketPrice": 0,
+                "bundle": 10,
+            },
+            "rareRelic": {
+                "name": "Rare Relic",
+                "type": "material",
+                "class": "",
+                "rarity": "uncommon",
+                "price": 0,
+                "marketPrice": 0,
+                "bundle": 10,
+            },
+            "ancientRelic": {
+                "name": "Ancient Relic",
+                "type": "material",
+                "class": "",
+                "rarity": "common",
+                "price": 0,
+                "marketPrice": 0,
+                "bundle": 100,
+            },
+            "caldarrFusionMaterialFishing": {
+                "name": "Fishing fusion",
+                "tableName": "Caldarr Fusion Material",
+                "type": "fusionMaterial",
+                "class": "caldarrFusionMaterial",
+                "craftMethod": "fishing",
+                "bundle": 1,
+                "rarity": "rare",
+                "amount": 30,
+                "marketPrice": 0,
+                "craftPrice": 80,
+                "craftCost": 0,
+                "recipe": {
+                    "fish": 72,
+                    "naturalPearl": 36,
+                    "caldarrSolarCarp": 9
+                }
+            },
+            "caldarrFusionMaterialHunting": {
+                "name": "Hunting fusion",
+                "tableName": "Caldarr Fusion Material",
+                "type": "fusionMaterial",
+                "class": "caldarrFusionMaterial",
+                "craftMethod": "hunting",
+                "bundle": 1,
+                "rarity": "rare",
+                "amount": 30,
+                "marketPrice": 0,
+                "craftPrice": 80,
+                "craftCost": 0,
+                "recipe": {
+                    "thickRawMeat": 72,
+                    "toughLeather": 36,
+                    "caldarrThickRawMeat": 9
+                }
+            },
+            "caldarrFusionMaterialExcavation": {
+                "name": "Excavation fusion",
+                "tableName": "Caldarr Fusion Material",
+                "type": "fusionMaterial",
+                "class": "caldarrFusionMaterial",
+                "craftMethod": "excavation",
+                "bundle": 1,
+                "rarity": "rare",
+                "amount": 30,
+                "marketPrice": 0,
+                "craftPrice": 80,
+                "craftCost": 0,
+                "recipe": {
+                    "ancientRelic": 56,
+                    "rareRelic": 28,
+                    "caldarrRelic": 7
+                }
+            },
+            "simpleOrehaFusionMaterialFishing": {
+                "name": "Fishing fusion",
+                "tableName": "Simple Oreha Fusion Material",
+                "type": "fusionMaterial",
+                "class": "simpleOrehaFusionMaterial",
+                "craftMethod": "fishing",
+                "bundle": 1,
+                "rarity": "uncommon",
+                "amount": 30,
+                "marketPrice": 0,
+                "craftPrice": 200,
+                "craftCost": 0,
+                "recipe": {
+                    "fish": 72,
+                    "naturalPearl": 36,
+                    "orehaSolarCarp": 9
+                }
+            },
+            "simpleOrehaFusionMaterialHunting": {
+                "name": "Hunting fusion",
+                "tableName": "Simple Oreha Fusion Material",
+                "type": "fusionMaterial",
+                "class": "simpleOrehaFusionMaterial",
+                "craftMethod": "hunting",
+                "bundle": 1,
+                "rarity": "uncommon",
+                "amount": 30,
+                "marketPrice": 0,
+                "craftPrice": 200,
+                "craftCost": 0,
+                "recipe": {
+                    "thickRawMeat": 72,
+                    "orehaThickMeat": 9,
+                    "toughLeather": 36
+                }
+            },
+            "simpleOrehaFusionMaterialExcavation": {
+                "name": "Excavation fusion",
+                "tableName": "Simple Oreha Fusion Material",
+                "type": "fusionMaterial",
+                "class": "simpleOrehaFusionMaterial",
+                "craftMethod": "excavation",
+                "bundle": 1,
+                "rarity": "uncommon",
+                "amount": 30,
+                "marketPrice": 0,
+                "craftPrice": 200,
+                "craftCost": 0,
+                "recipe": {
+                    "ancientRelic": 56,
+                    "rareRelic": 28,
+                    "orehaRelic": 7
+                }
+            },
+            "basicOrehaFusionMaterialFishing": {
+                "name": "Fishing fusion",
+                "tableName": "Basic Oreha Fusion Material",
+                "type": "fusionMaterial",
+                "class": "basicOrehaFusionMaterial",
+                "craftMethod": "fishing",
+                "bundle": 1,
+                "rarity": "rare",
+                "amount": 30,
+                "marketPrice": 0,
+                "craftPrice": 205,
+                "craftCost": 0,
+                "recipe": {
+                    "fish": 80,
+                    "naturalPearl": 40,
+                    "orehaSolarCarp": 10
+                }
+            },
+            "basicOrehaFusionMaterialHunting": {
+                "name": "Hunting fusion",
+                "tableName": "Basic Oreha Fusion Material",
+                "type": "fusionMaterial",
+                "class": "basicOrehaFusionMaterial",
+                "craftMethod": "hunting",
+                "bundle": 1,
+                "rarity": "rare",
+                "amount": 30,
+                "marketPrice": 0,
+                "craftPrice": 205,
+                "craftCost": 0,
+                "recipe": {
+                    "thickRawMeat": 80,
+                    "orehaThickMeat": 10,
+                    "toughLeather": 40
+                }
+            },
+            "basicOrehaFusionMaterialExcavation": {
+                "name": "Excavation fusion",
+                "tableName": "Basic Oreha Fusion Material",
+                "type": "fusionMaterial",
+                "class": "basicOrehaFusionMaterial",
+                "craftMethod": "excavation",
+                "bundle": 1,
+                "rarity": "rare",
+                "amount": 30,
+                "marketPrice": 0,
+                "craftPrice": 205,
+                "craftCost": 0,
+                "recipe": {
+                    "ancientRelic": 64,
+                    "rareRelic": 26,
+                    "orehaRelic": 8
+                }
             }
+        }   
+
+        const userSettingsC = {
+            "workshopLevel": 1,
+            "showAll": true,
+            "reduceCost": 0,
         }
+
+        let userSettings = JSON.parse(JSON.stringify(userSettingsC));
         let mats = JSON.parse(JSON.stringify(matsC));
-        let crafts = JSON.parse(JSON.stringify(craftsC));
+
         function reset(){
+            userSettings = JSON.parse(JSON.stringify(userSettingsC));
             mats = JSON.parse(JSON.stringify(matsC));
-            crafts = JSON.parse(JSON.stringify(craftsC));
-            localStorage.removeItem("matsObject");
-            localStorage.removeItem("craftsObject");
-            
+            localStorage.removeItem("matsObject");            
             
             process();
+            calculate();
         }
+
+        function showSettings(){
+            let bgBox = document.querySelector(".bgBox");
+            let settingsBox = document.querySelector(".settingsWindow");
+
+            bgBox.style.visibility = "visible";
+            settingsBox.style.visibility = "visible";
+        }
+
+        function hideSettings(){
+            let bgBox = document.querySelector(".bgBox");
+            let settingsBox = document.querySelector(".settingsWindow");
+
+            bgBox.style.visibility = "hidden";
+            settingsBox.style.visibility = "hidden";
+        }
+
         function process(){
-            const matsTable = document.querySelector('.matsTable');
+            const matsTable = document.querySelector('.matsTableContent');
             matsTable.innerHTML = "";
 
-            const header_el = document.createElement('div');
-            header_el.classList.add('matsRow');
+            const craftsTable = document.querySelector('.craftsTableContent');
+            craftsTable.innerHTML = "";            
 
-            const name_box_el = document.createElement('div');
-            name_box_el.textContent = "Material";
-            name_box_el.classList.add('matNameBox');
-            header_el.appendChild(name_box_el);
+            const fusionCraftsTable = document.querySelector('.fusionCraftsTableContent');
+            fusionCraftsTable.innerHTML = "";
 
-            const price_box_el = document.createElement('div');
-            price_box_el.textContent = "Market price";
-            price_box_el.classList.add('matPriceBox');
-            header_el.appendChild(price_box_el);
-
-            matsTable.appendChild(header_el);
+            const border_el = document.createElement('div');
+            border_el.classList.add('border');
 
             for (const el in mats){               
+                if (mats[el].type === "material"){
+                    const row_el = document.createElement('div');
+                    row_el.classList.add('matsRow');
+                    row_el.classList.add(mats[el].rarity);           
 
-                const row_el = document.createElement('div');
-                row_el.classList.add('matsRow');
-                row_el.classList.add(mats[el].rarity);           
+                    const icon_el = document.createElement('img');
+                    icon_el.src = 'icons/'+el+'.png';
+                    icon_el.classList.add('imgIcon');
+                    row_el.appendChild(icon_el);
 
-                const icon_el = document.createElement('img');
-                icon_el.src = 'icons/'+el+'.png';
-                icon_el.classList.add('imgIcon');
-                row_el.appendChild(icon_el);
+                    const name_el = document.createElement('div');
+                    name_el.classList.add('matsName');
+                    name_el.textContent = mats[el].name;
+                    row_el.appendChild(name_el);
 
-                const name_el = document.createElement('div');
-                name_el.classList.add('matsName');
-                name_el.textContent = mats[el].name;
-                row_el.appendChild(name_el);
+                    row_el.appendChild(border_el.cloneNode());
 
-                const input_el = document.createElement('input');
-                input_el.type = 'text';
-                input_el.name = el;
-                input_el.maxlength = 4;
-                input_el.value = mats[el].marketPrice;
-                input_el.classList.add('inputCustomMats');
-                row_el.appendChild(input_el);
+                    const input_el = document.createElement('input');
+                    input_el.type = 'text';
+                    input_el.name = el;
+                    input_el.maxlength = 4;
+                    input_el.value = mats[el].marketPrice;
+                    input_el.classList.add('inputCustomMats');
+                    row_el.appendChild(input_el);
 
-                matsTable.appendChild(row_el);
-            } 
+                    matsTable.appendChild(row_el);
+                }
 
-            const craftsTable = document.querySelector('.craftsTable');
-            craftsTable.innerHTML = "";
+                if (mats[el].type === "item"){
+                    const row_el = document.createElement('div');
+                    row_el.classList.add('matsRow');
+                    row_el.classList.add(mats[el].rarity);               
 
-            const header2_el = document.createElement('div');
-            header2_el.classList.add('matsRow');
+                    const icon_el = document.createElement('img');
+                    icon_el.src = 'icons/'+el+'.png';
+                    icon_el.id = el;
+                    icon_el.classList.add('imgCraftIcon');
+                    row_el.appendChild(icon_el);
 
-            const name_box2_el = document.createElement('div');
-            name_box2_el.textContent = "Material";
-            name_box2_el.classList.add('matNameBox');
-            header2_el.appendChild(name_box2_el);
+                    const name_el = document.createElement('div');
+                    name_el.classList.add('matsName');
+                    name_el.textContent = mats[el].name;
+                    row_el.appendChild(name_el);
 
-            const price_box2_el = document.createElement('div');
-            price_box2_el.textContent = "Market price";
-            price_box2_el.classList.add('matPriceBox');
-            header2_el.appendChild(price_box2_el);
+                    row_el.appendChild(border_el.cloneNode());
 
-            const cost_box2_el = document.createElement('div');
-            cost_box2_el.textContent = "Cost";
-            cost_box2_el.classList.add('matCostBox');
-            header2_el.appendChild(cost_box2_el);
+                    const input_el = document.createElement('input');
+                    input_el.type = 'text';
+                    input_el.name = el;
+                    input_el.maxlength = 4;
+                    input_el.value = mats[el].marketPrice;
+                    input_el.classList.add('inputCustomMats');
+                    row_el.appendChild(input_el);
 
-            const profit_box2_el = document.createElement('div');
-            profit_box2_el.textContent = "Profit";
-            profit_box2_el.classList.add('matProfitBox');
-            header2_el.appendChild(profit_box2_el);
+                    row_el.appendChild(border_el.cloneNode());
 
-            craftsTable.appendChild(header2_el);
-            for (const el in crafts){
+                    const cost_el = document.createElement('div');
+                    cost_el.classList.add('craftsCost');
+                    cost_el.classList.add(el);
+                    cost_el.name = el;
+                    cost_el.textContent = (+mats[el].craftCost).toFixed(1);
+                    row_el.appendChild(cost_el);
 
-                const row_el = document.createElement('div');
-                row_el.classList.add('craftsRow');
-                row_el.classList.add(crafts[el].rarity);               
+                    row_el.appendChild(border_el.cloneNode());
 
-                const icon_el = document.createElement('img');
-                icon_el.src = 'icons/'+el+'.png';
-                icon_el.id = el;
-                icon_el.classList.add('imgCraftIcon');
-                row_el.appendChild(icon_el);
+                    const profit_el = document.createElement('div');
+                    profit_el.classList.add('craftsProfit');
+                    profit_el.classList.add(el);
+                    profit_el.textContent = (mats[el].marketPrice*mats[el].amount - mats[el].craftCost-Math.ceil(mats[el].marketPrice*0.05)*mats[el].amount).toFixed(1); 
+                    row_el.appendChild(profit_el);
 
-                const name_el = document.createElement('div');
-                name_el.classList.add('craftsName');
-                name_el.textContent = crafts[el].name;
-                row_el.appendChild(name_el);
+                    craftsTable.appendChild(row_el);
+                }
 
-                const input_el = document.createElement('input');
-                input_el.type = 'text';
-                input_el.name = el;
-                input_el.maxlength = 4;
-                input_el.value = crafts[el].marketPrice;
-                input_el.classList.add('inputCustomCrafts');
-                row_el.appendChild(input_el);
+                if (mats[el].type === "fusionMaterial"){
+                    let fusionTable = document.querySelector(`.${mats[el].class}table`);
+                    if (!fusionTable) {
+                        fusionTable = document.createElement('div');
+                        fusionTable.classList.add(`${mats[el].class}table`);
+                        fusionTable.classList.add(`fusionTable`);
+                        fusionCraftsTable.appendChild(fusionTable);       
 
-                const cost_el = document.createElement('div');
-                cost_el.classList.add('craftsCost');
-                cost_el.name = el;
-                cost_el.textContent = crafts[el].craftCost;
-                row_el.appendChild(cost_el);
+                        const row_el = document.createElement('div');
+                        row_el.classList.add('matsRow');
+                        row_el.classList.add(mats[el].rarity);               
 
-                const profit_el = document.createElement('div');
-                profit_el.classList.add('craftsProfit');
-                profit_el.textContent = (crafts[el].marketPrice*3 - crafts[el].craftCost).toFixed(2); 
-                row_el.appendChild(profit_el);
+                        const icon_el = document.createElement('img');
+                        icon_el.src = 'icons/'+mats[el].class+'.png';
+                        icon_el.id = el;
+                        icon_el.classList.add('imgIcon');
+                        row_el.appendChild(icon_el);
 
-                craftsTable.appendChild(row_el);
-            }
+                        const name_el = document.createElement('div');
+                        name_el.classList.add('matsName');
+                        name_el.textContent = mats[el].tableName;
+                        row_el.appendChild(name_el);
+
+                        row_el.appendChild(border_el.cloneNode());
+
+                        const input_el = document.createElement('input');
+                        input_el.type = 'text';
+                        input_el.name = mats[el].class;
+                        input_el.maxlength = 4;
+                        input_el.value = mats[el].marketPrice;
+                        input_el.classList.add('inputCustomMats');
+                        row_el.appendChild(input_el);     
+
+                        row_el.appendChild(border_el.cloneNode());
+
+                        fusionTable.appendChild(row_el);             
+                    }
+
+                    const row_el = document.createElement('div');
+                    row_el.classList.add('craftsRow');
+                    row_el.classList.add("common");               
+
+                    const icon_el = document.createElement('img');
+                    icon_el.src = 'icons/'+(mats[el].craftMethod === "fishing" ? "fish" : mats[el].craftMethod === "hunting" ? "thickRawMeat" : "rareRelic")+'.png';
+                    icon_el.id = el;
+                    icon_el.classList.add('imgCraftIcon');
+                    row_el.appendChild(icon_el);
+
+                    const name_el = document.createElement('div');
+                    name_el.classList.add('fusionName');
+                    name_el.textContent = mats[el].name;
+                    row_el.appendChild(name_el);
+
+                    row_el.appendChild(border_el.cloneNode());
+
+                    const cost_el = document.createElement('div');
+                    cost_el.classList.add('craftsCost');
+                    cost_el.classList.add(el);
+                    cost_el.name = el;
+                    cost_el.textContent = mats[el].craftCost;
+                    row_el.appendChild(cost_el);
+
+                    row_el.appendChild(border_el.cloneNode());
+
+                    const profit_el = document.createElement('div');
+                    profit_el.classList.add('craftsProfit');
+                    profit_el.classList.add(el);
+                    profit_el.textContent = (mats[el].marketPrice*30 - mats[el].craftCost-Math.ceil(mats[el].marketPrice*0.05)*30).toFixed(1); 
+                    row_el.appendChild(profit_el);
+
+                    fusionTable.appendChild(row_el);
+                }                
+            }             
 
             let icons = document.querySelectorAll(".imgCraftIcon");
             icons.forEach(el => {
@@ -906,11 +1774,11 @@
                     let maxX = window.innerWidth;
                     let y = 0;
                     if (e.clientY+300 > maxY) {
-                        y = e.pageY - 100;
+                        y = e.pageY - 120;
                     } else y = e.pageY;
                     let x = 0;
                     if (e.clientX+300 > maxX) {
-                        x = e.pageX - 100;
+                        x = e.pageX - 120;
                     } else x = e.pageX;
                     elTooltip.style.visibility = "visible";
                     elTooltip.style.top = y+5+"px";
@@ -918,7 +1786,7 @@
 
                     elTooltip.innerHTML = "";
 
-                    for (let obj in crafts[el.id].recipe){
+                    for (let obj in mats[el.id].recipe){
                         const row_el = document.createElement('div');
                         row_el.classList.add('matsRow');
                         row_el.classList.add(mats[obj].rarity);           
@@ -930,16 +1798,29 @@
 
                         const name_el = document.createElement('div');
                         name_el.classList.add('matsName');
-                        name_el.textContent = mats[obj].name+" x"+crafts[el.id].recipe[obj];
+                        name_el.textContent = mats[obj].name+" x"+mats[el.id].recipe[obj];
                         row_el.appendChild(name_el);
 
                         elTooltip.appendChild(row_el);
                     }
+
+                    // 
+                    // ADD FUSION TOOLTIP OPTION 
+                    //
+
                 });
 
                 el.addEventListener("mouseleave", (e) => {
                     elTooltip.style = "visibility: invisible"
                 })
+            });
+
+
+            let inputs = document.querySelectorAll(".inputCustomMats");
+            inputs.forEach(el => {
+                el.addEventListener("change", (e) => {
+                    calculate();
+                });
             });
 
             //const input = document.querySelector("input");
@@ -956,42 +1837,65 @@
         }
 
         window.onload = (event) => {
-            if ("matsObject" in localStorage) mats = JSON.parse(localStorage.getItem('matsObject'));
-            if ("craftsObject" in localStorage) crafts = JSON.parse(localStorage.getItem('craftsObject'));
+            if ("dataVer" in localStorage){
+                let storageVer = localStorage.getItem('dataVer');
+                if (storageVer == dataVer) {
+                    if ("matsObject" in localStorage) mats = JSON.parse(localStorage.getItem('matsObject'));
+                } else {
+                    alert("Database was updated. Resetting stored data");
+                    localStorage.setItem('dataVer', dataVer);
+                }
+            } else {
+                localStorage.setItem('dataVer', dataVer);
+            }
+            
             process();
+            calculate();
         }
 
         function setCraftCost(mat){
             let cost = 0;
-            for (let el in crafts[mat].recipe){
-                cost += crafts[mat].recipe[el]*mats[el].price;
+            for (let el in mats[mat].recipe){
+                cost += mats[mat].recipe[el]*(mats[el].price?mats[el].price:mats[el].marketPrice);
             }
-            return crafts[mat].craftCost = (cost+crafts[mat].craftPrice).toFixed(2);
+            return mats[mat].craftCost = (cost+mats[mat].craftPrice).toFixed(1);
         }
 
         function setCraftMarketPrice(price, mat){
-            return crafts[mat].marketPrice = price;
+            if (!mats[mat]){
+                Object.values(mats).filter(el => el.class === mat).forEach(el => el.marketPrice = price);
+            } else return mats[mat].marketPrice = price;
         }
 
         function setMatPrice(price, mat){
-            mats[mat].price = (price / mats[mat].bundle).toFixed(2);
+            mats[mat].price = (price / mats[mat].bundle).toFixed(1);
             mats[mat].marketPrice = price;
         }
 
         function calculate(){
             let matsInputs = document.querySelectorAll('.inputCustomMats');
-            matsInputs.forEach(el => setMatPrice(el.value, el.name));
-            let craftInputs = document.querySelectorAll('.inputCustomCrafts');
-            craftInputs.forEach(el => setCraftMarketPrice(el.value, el.name));
+            matsInputs.forEach(el => {
+                if (mats[el.name] && mats[el.name].type === "material") {
+                    setMatPrice(el.value, el.name);
+                } else {
+                    setCraftMarketPrice(el.value, el.name);
+                }
+            });
 
-            for (let el in crafts){
-                setCraftCost(el);
+            for (let el in mats){
+                if (mats[el].type === "item" || mats[el].type === "fusionMaterial") setCraftCost(el);
+                
+                if (mats[el].type === "item" || mats[el].type === "fusionMaterial"){
+                    let costField = document.querySelector(`.craftsCost.${el}`);
+                    costField.textContent = mats[el].craftCost;
+                    let profitField = document.querySelector(`.craftsProfit.${el}`);
+                    profitField.textContent = (mats[el].marketPrice*mats[el].amount - mats[el].craftCost-Math.ceil(mats[el].marketPrice*0.05)*mats[el].amount).toFixed(1);                     
+                }
+                
             }
 
             localStorage.setItem('matsObject', JSON.stringify(mats));
-            localStorage.setItem('craftsObject', JSON.stringify(crafts));
 
-            process();
         }
     </script>
 </body>
